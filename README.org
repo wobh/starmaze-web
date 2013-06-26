@@ -1,0 +1,24 @@
+#+TITLE:     Starmaze-web README
+#+AUTHOR:    William Clifford
+#+EMAIL:     wobh@yahoo.com
+#+DATE:      2013-06-25 Tue
+#+DESCRIPTION: Starmaze game for your browser
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:6 num:nil toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+#+XSLT:
+
+* About Starmaze-web
+
+You can read about the Starmaze at John Cartan's website:  http://www.cartania.com/starmaze/intro.html. 
+
+You can download my Common Lisp implementation of Starmaze here: https://github.com/wobh/starmaze
+
+When I get this done, you'll be able download and play Starmaze right in your browser.
+
