@@ -78,7 +78,7 @@ var Starmaze = function (maze_name, axes_name) {
         return cube[path_ref];
     };
 
-    var axes = Axes[settings['maze_name']];
+    var axes = Axes[settings['axes_name']];
     
     this.get_axis = function (axis_ref) {
 	return axes[axis_ref];
@@ -95,7 +95,7 @@ var Starmaze = function (maze_name, axes_name) {
     };
 
     this.looker = function (axis) {
-        return this.locus() & axis; 
+        return !((this.locus() & axis) === 0); 
     };
 
     this.walker = function (axis) {
@@ -104,11 +104,11 @@ var Starmaze = function (maze_name, axes_name) {
 
     var no_star = new Error("No star there.");
 
-    this.walk_path = function (path_ref) {
-        if (this.looker(path_ref) === 0) {
-            throw no_star;
+    this.walk_path = function (axis_ref) {
+        if (this.looker(axis_ref)) {
+            return trail.push(this.walker(axis_ref));
         } else {
-            return trail.push(this.walker(path_ref));
+            throw no_star;
         };
     };
 };
