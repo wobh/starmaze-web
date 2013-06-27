@@ -94,19 +94,19 @@ var Starmaze = function (maze_name, axes_name) {
         return trail[trail.length - 1];
     };
 
-    this.looker = function (axis) {
+    var looker = function (axis) {
         return !((this.locus() & axis) === 0); 
     };
 
-    this.walker = function (axis) {
+    var walker = function (axis) {
         return this.locus() ^ this.get_path_by_axis(axis);
     };
 
     var no_star = new Error("No star there.");
 
     this.walk_path = function (axis_ref) {
-        if (this.looker(axis_ref)) {
-            return trail.push(this.walker(axis_ref));
+        if (looker(axis_ref)) {
+            return trail.push(walker(axis_ref));
         } else {
             throw no_star;
         };
