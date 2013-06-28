@@ -2,14 +2,14 @@
 
 // FILE: starmaze.js
 
+// AUTHORS
+
+// William H. Clifford <wobh@wobh.org>
+
 // DESCRIPTION
 
 // Based on the game described by John Cartan at:
 // http://www.cartania.com/starmaze/intro.html
-
-// AUTHORS
-
-// William H. Clifford <wobh@wobh.org>
 
 // NOTES
 
@@ -52,18 +52,20 @@ var Starmaze = function (maze_name, axes_name, keys_name) {
             'number_row' : keys_name
     };
 
+    var that = this;
+
     var maze = Mazes[settings['maze_name']];
 
     var get_path = function (path_ref) {
 	return maze[path_ref];
     };
 
-    // Hypercube coordinate mappings
-    var hypercube = Mazes['hypercube'];
+    // TODO: Hypercube coordinate mappings. Not yet implemented.
+    // var hypercube = Mazes['hypercube'];
 
-    this.get_corner = function (path_ref) {
-        return hypercube[path_ref];
-    };
+    // this.get_corner = function (path_ref) {
+    //     return hypercube[path_ref];
+    // };
 
     var axes = Axes[settings['axes_name']];
     
@@ -90,26 +92,27 @@ var Starmaze = function (maze_name, axes_name, keys_name) {
     this.home_base = 0757;
     this.shangrila = 0777;
 
-    var trail = [this.entrance];
+    this.trail = [this.entrance];
 
     this.locus = function () {
-        return trail[trail.length - 1];
+        return this.trail[this.trail.length - 1];
     };
 
-    var looker = function (here, axis) {
-        return !((here & axis) === 0); 
+
+    var looker = function (axis) {
+        return !((that.locus() & axis) === 0); 
     };
 
-    var walker = function (here, path) {
-        return here ^ path;
+    var walker = function (path) {
+        return that.locus() ^ path;
     };
 
     var no_star = new Error("No star there.");
 
     this.walk_path = function (key) {
-        var here = this.locus();
-        if (looker(here, this.get_axis_by_key(key))) {
-            return trail.push(here, walker(this.get_path_by_key(key)));
+        if (looker(this.get_axis_by_key(key))) {
+            this.trail.push(walker(this.get_path_by_key(key)));
+            return this.locus();
         } else {
             throw no_star;
         };
