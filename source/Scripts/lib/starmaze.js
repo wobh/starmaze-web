@@ -36,77 +36,80 @@ var Axes = {
     'minor': [0001, 0002, 0004, 0010, 0020, 0040, 0100, 0200, 0400]
 };
 
-// var Keys = {
-//      'number-row': ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
-//      'number-pad': ['7', '8', '9', '4', '5', '6', '1', '2', '3'],
-//     'qwerty-left': ['q', 'w', 'e', 'a', 's', 'd', 'z', 'x', 'c']
-// };
+var Keys = {
+     'number_row': ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+     'number_pad': ['7', '8', '9', '4', '5', '6', '1', '2', '3'],
+    'qwerty_left': ['q', 'w', 'e', 'a', 's', 'd', 'z', 'x', 'c']
+};
 
-// var keys = Keys[keys_name];
-
-// var get_keys = function (keys_ref) {
-//     return keys[keys_ref];
-// };
-
-// var get_axis_by_key = function (key_ref) {
-//     return get_axis(keys.indexOf(key_ref));
-// };
-
-
-var Starmaze = function (maze_name, axes_name) {
+var Starmaze = function (maze_name, axes_name, keys_name) {
     var settings = {
         'maze_name': (typeof maze_name === 'undefined') ? 
             'classical' : maze_name,
         'axes_name': (typeof axes_name === 'undefined') ?
             'major' : axes_name,
-        'entrance':  0020,
-        'blackhole': 0000,
-        'home_base': 0757,
-        'shangrila': 0777
+        'keys_name': (typeof keys_name === 'undefined') ?
+            'number_row' : keys_name
     };
 
     var maze = Mazes[settings['maze_name']];
 
-    this.get_path = function (path_ref) {
+    var get_path = function (path_ref) {
 	return maze[path_ref];
     };
 
     // Hypercube coordinate mappings
-    var cube = Mazes['hypercube'];
+    var hypercube = Mazes['hypercube'];
 
     this.get_corner = function (path_ref) {
-        return cube[path_ref];
+        return hypercube[path_ref];
     };
 
     var axes = Axes[settings['axes_name']];
     
-    this.get_axis = function (axis_ref) {
-	return axes[axis_ref];
+    var get_axis = function (axis_ref) {
+        return axes[axis_ref];
     };
 
     this.get_path_by_axis = function (axis) {
-	return this.get_path(axes.indexOf(axis));
+	return this.get_axis(axes.indexOf(axis));
     };
 
-    var trail = [settings['entrance']];
+    this.keys = Keys[settings['keys_name']];
+
+    this.get_axis_by_key = function (key) {
+        return get_axis(this.keys.indexOf(key));
+    };
+
+    this.get_path_by_key = function (key) {
+        return get_path(this.keys.indexOf(key));
+    };
+
+    this.entrance =  0020;
+    this.blackhole = 0000;
+    this.home_base = 0757;
+    this.shangrila = 0777;
+
+    var trail = [this.entrance];
 
     this.locus = function () {
         return trail[trail.length - 1];
     };
 
-    var looker = function (axis) {
-        return !((this.locus() & axis) === 0); 
+    var looker = function (here, axis) {
+        return !((here & axis) === 0); 
     };
 
-    var walker = function (axis) {
-        return this.locus() ^ this.get_path_by_axis(axis);
+    var walker = function (here, path) {
+        return here ^ path;
     };
 
     var no_star = new Error("No star there.");
 
-    this.walk_path = function (axis_ref) {
-        if (looker(axis_ref)) {
-            return trail.push(walker(axis_ref));
+    this.walk_path = function (key) {
+        var here = this.locus();
+        if (looker(here, this.get_axis_by_key(key))) {
+            return trail.push(here, walker(this.get_path_by_key(key)));
         } else {
             throw no_star;
         };
