@@ -184,10 +184,21 @@ var Starmaze = function (maze_name, axes_name, keys_name) {
         } else {
             figure = this.figures[figure_name];
         };
-        
-        var get_figure = this.make_figure_getter(figure);
-        var stars = this.locus_as_array_of_bits();
-        return stars.map(get_figure);
+        if (figure === 'undefined') {
+            throw Error('Undefined figure_name ' + figure_name + '.');
+        } else {
+            var get_figure = this.make_figure_getter(figure);
+            var stars = this.locus_as_array_of_bits().map(get_figure);
+            var str = [];
+            for (var i = 0; i < 3; i++) {
+                str.push("\n");
+                for (var j = 0; j < 3; j++) {
+                    str.push(' ');
+                    str.push(stars[3 * i + j]);
+                };
+            };
+            return str.join('');
+        };
     };
 };
 
