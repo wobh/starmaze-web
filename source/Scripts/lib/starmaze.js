@@ -106,7 +106,7 @@ var Starmaze = function (maze_name, axes_name, keys_name) {
     };
 
     this.sky_name = function() {
-        return this.named_sky(this.locus());
+        return named_skies[this.locus()];
     };
 
     var looker = function (axis) {
