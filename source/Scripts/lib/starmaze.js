@@ -86,10 +86,10 @@ var Starmaze = function (maze_name, axes_name, keys_name) {
     };
 
     var sky_names = {
-        entrance:  0020,
-        blackhole: 0000,
-        homebase:  0757,
-        shangrila: 0777
+        'entrance':  0020,
+        'blackhole': 0000,
+        'homebase':  0757,
+        'shangrila': 0777
     };
 
     var named_skies = {
@@ -165,7 +165,29 @@ var Starmaze = function (maze_name, axes_name, keys_name) {
 	return bits.map(Boolean);
     };
 
-    this.locus_as_string = function (maze_locus) {
+    this.figures = {
+        'star': [' ', '*'],
+        'from': [' ', '+'],
+        'near': [' ', 'o'],
+        'symbols': ['void', 'star'],
+        'yinyang': [function (str) { return '(' + str + ')'; },
+                    function (str) { return '[' + str + ']'; }]
+    };
+    
+    this.make_figure_getter = function (figures) {
+        return function (index) { return figures[index]; };
+    };
+
+    this.locus_as_string = function (figure_name) {
+        if (typeof figure_name === 'undefined') { 
+            var figure = this.figures['star'];
+        } else {
+            figure = this.figures[figure_name];
+        };
+        
+        var get_figure = this.make_figure_getter(figure);
+        var stars = this.locus_as_array_of_bits();
+        return stars.map(get_figure);
     };
 };
 
