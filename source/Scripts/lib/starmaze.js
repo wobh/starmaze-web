@@ -63,9 +63,7 @@ var Starmaze = function (maze_name, axes_name, keys_name) {
     // TODO: Hypercube coordinate mappings. Not yet implemented.
     // var hypercube = Mazes['hypercube'];
 
-    // this.get_corner = function (path_ref) {
-    //     return hypercube[path_ref];
-    // };
+    // this.corner = function (path_ref) {};
 
     var axes = Axes[settings['axes_name']];
     
@@ -87,17 +85,29 @@ var Starmaze = function (maze_name, axes_name, keys_name) {
         return get_path(this.keys.indexOf(key));
     };
 
-    this.entrance =  0020;
-    this.blackhole = 0000;
-    this.home_base = 0757;
-    this.shangrila = 0777;
+    var sky_names = {
+        entrance:  0020,
+        blackhole: 0000,
+        homebase:  0757,
+        shangrila: 0777
+    };
 
-    this.trail = [this.entrance];
+    var named_skies = {
+        0020: 'entrance',
+        0000: 'blackhole',
+        0757: 'homebase',
+        0777: 'shangrila'
+    };
+
+    this.trail = [sky_names['entrance']];
 
     this.locus = function () {
         return this.trail[this.trail.length - 1];
     };
 
+    this.sky_name = function() {
+        return this.named_sky(this.locus());
+    };
 
     var looker = function (axis) {
         return !((that.locus() & axis) === 0); 
@@ -117,55 +127,47 @@ var Starmaze = function (maze_name, axes_name, keys_name) {
             throw no_star;
         };
     };
-};
 
-    var locus_as_array_of_bits = function (maze_locus) {
+    this.locus_as_array_of_bits = function () {
+        var here = that.locus();
 	var bits = [];
 	for (var power = 256; power >= 1; power /= 2) {
-	    bits.push(Math.floor (maze_locus / power));
-	    maze_locus = maze_locus % power;
+	    bits.push(Math.floor (here / power));
+	    here = here % power;
 	};
 	return bits;
     };
 
-    var locus_as_array_of_powers = function (maze_locus) {
+    this.locus_as_array_of_powers = function () {
+        var here = that.locus();
 	var powers = [];
 	for (var power = 256; power >= 1; power /= 2) {
-	    if (Math.floor(maze_locus / power) == 0) {
+	    if (Math.floor(here / power) == 0) {
 		powers.push(0);
 	    } else {
 		powers.push(power);
 	    };
-	    maze_locus = maze_locus % power;
+	    here = here % power;
 	};
 	return powers;
     };
 
-    var locus_as_array_of_booleans = function (maze_locus) {
+    this.locus_as_array_of_booleans = function (maze_locus) {
+        var here = that.locus();
 	var booleans = [];
 	for (var power = 256; power >= 1; power /= 2) {
-	    booleans.push(Boolean(Math.floor(maze_locus / power)));
-	    maze_locus = maze_locus % power;
+	    booleans.push(Boolean(Math.floor(here / power)));
+	    here = here % power;
 	};
 	return booleans;
 
-	var bits = locus_as_array_of_bits(maze_locus);
+	var bits = that.locus_as_array_of_bits(maze_locus);
 	return bits.map(Boolean);
     };
 
-    var locus_as_string = function (maze_locus) {};
-
-    var walk_error = new Error("No path that way");
-
-    var walk_path = function (maze_locus, maze_path) {
-	if (maze_locus & maze_path) {
-	    return maze_locus ^ maze_path;
-	} else {
-	    throw walk_error;
-	};
+    this.locus_as_string = function (maze_locus) {
     };
-    
-}();
+};
 
 
 var view = function () {
@@ -179,6 +181,5 @@ var view = function () {
     };
 
     var draw_maze_locus = function (maze_locus) {
-	
     };
 }();
