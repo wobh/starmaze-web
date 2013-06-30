@@ -117,14 +117,14 @@ var Starmaze = function (maze_name, axes_name, keys_name) {
         return that.locus() ^ path;
     };
 
-    var no_star = new Error("No star there.");
+    var ErrorNoStar = new Error("No star there.");
 
     this.walk_path = function (key) {
         if (looker(this.get_axis_by_key(key))) {
             this.trail.push(walker(this.get_path_by_key(key)));
             return this.locus();
         } else {
-            throw no_star;
+            throw ErrorNoStar;
         };
     };
 
