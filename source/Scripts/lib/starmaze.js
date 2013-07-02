@@ -237,6 +237,8 @@ var game = function (starmaze, sky) {
 
 var sky = function () {
 
+    var that = this;
+
     // use HTML5 canvas if available
     var sky = document.getElementById ('starmaze');
     if (sky.getContext) {
