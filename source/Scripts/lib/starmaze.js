@@ -227,7 +227,7 @@ var game = function (starmaze, sky) {
             break;
         case 'shangrila':
             this.sky.announce('You have found Shangri-La!');
-            break
+            break;
         default:
             throw new Error('WTF!');
         }
