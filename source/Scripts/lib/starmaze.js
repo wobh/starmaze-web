@@ -43,6 +43,9 @@ var Keys = {
 };
 
 var Starmaze = function (maze_name, axes_name, keys_name) {
+
+    var that = this;
+
     var settings = {
         'maze_name': (typeof maze_name === 'undefined') ? 
             'classical' : maze_name,
@@ -51,8 +54,6 @@ var Starmaze = function (maze_name, axes_name, keys_name) {
         'keys_name': (typeof keys_name === 'undefined') ?
             'number_row' : keys_name
     };
-
-    var that = this;
 
     var maze = Mazes[settings['maze_name']];
 
@@ -202,6 +203,37 @@ var Starmaze = function (maze_name, axes_name, keys_name) {
     };
 };
 
+var game = function (starmaze, sky) {
+    
+    var that = this;
+    var explore_mode = false;
+
+    this.walk = function (key) {
+        this.starmaze.walk_path(key);
+        switch (starmaze.sky_name())
+        {
+        case 'undefined':
+            break;
+        case 'blackhole':
+            this.sky.announce('You have fallen into black hole!');
+            break;
+        case 'homebase':
+            this.sky.announce('You have found your home base!');
+            if (explore_mode) {
+            } else {
+                this.explore(this.sky.ask('do you wish to keep'
+                                          + ' exploring the starmaze?'));
+            };
+            break;
+        case 'shangrila':
+            this.sky.announce('You have found Shangri-La!');
+            break
+        default:
+            throw new Error('WTF!');
+        }
+    };
+
+};
 
 var view = function () {
 
