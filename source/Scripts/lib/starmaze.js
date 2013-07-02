@@ -247,6 +247,9 @@ var sky = function () {
 	// use d3?
     };
 
+    var announce = function (message) {};
+    var ask = function (question) {};
+
     var draw_maze_locus = function (maze_locus) {
     };
 }();
