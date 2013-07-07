@@ -174,18 +174,25 @@ var Starmaze = function (maze_name, axes_name, keys_name) {
         'yinyang': [function (str) { return '(' + str + ')'; },
                     function (str) { return '[' + str + ']'; }]
     };
-    
+  
+    this.messages = {
+        'entrance': 'We at the entrance to the Starmaze.',
+        'blackhole': 'You have fallen into the Black Hole.',
+        'homebase': 'You have found your Homebase!',
+        'shangrila': 'You have found Shangri-La!'
+    };
+  
     this.make_figure_getter = function (figures) {
         return function (index) { return figures[index]; };
     };
 
     this.locus_as_string = function (figure_name) {
-        if (typeof figure_name === 'undefined') { 
+        if (typeof(figure_name) === 'undefined') { 
             var figure = this.figures['star'];
         } else {
             figure = this.figures[figure_name];
         };
-        if (figure === 'undefined') {
+        if (typeof(figure) === 'undefined') {
             throw Error('Undefined figure_name ' + figure_name + '.');
         } else {
             var get_figure = this.make_figure_getter(figure);
@@ -212,24 +219,30 @@ var game = function (starmaze, sky) {
         this.starmaze.walk_path(key);
         switch (starmaze.sky_name())
         {
-        case 'undefined':
-            break;
+        case 'entrance':
+            if (this.starmaze.trail.length > 1) {
+                break;
+            } else {
+                this.sky.announce(this.starmaze.messages['entrance']);
+                break;
+            };
         case 'blackhole':
-            this.sky.announce('You have fallen into black hole!');
+            this.sky.announce(this.starmaze.messages['blackhole']); 
             break;
         case 'homebase':
-            this.sky.announce('You have found your home base!');
+            this.sky.announce(this.starmaze.messages['homebase']);
             if (explore_mode) {
             } else {
-                this.explore(this.sky.ask('do you wish to keep'
-                                          + ' exploring the starmaze?'));
+                this.starmaze.explore = 
+                    this.sky.yes_or_no('do you wish to keep'
+                                 + ' exploring the starmaze?');
             };
             break;
         case 'shangrila':
-            this.sky.announce('You have found Shangri-La!');
+            this.sky.announce(this.starmaze.messages['shangrila']);
             break;
         default:
-            throw new Error('WTF!');
+            break;
         }
     };
 
@@ -247,8 +260,11 @@ var sky = function () {
 	// use d3?
     };
 
-    var announce = function (message) {};
-    var ask = function (question) {};
+    var announce = function (message) {
+        console.log(message);
+    };
+    var ask = function (question) {
+    };
 
     var draw_maze_locus = function (maze_locus) {
     };
